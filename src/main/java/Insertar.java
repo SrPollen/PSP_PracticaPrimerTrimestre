@@ -1,10 +1,13 @@
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Insertar extends Thread{
+    private static Semaphore semaforo;
     private int insStart;
     private int insMax;
 
-    public Insertar(int insStart, int insMax){
+    public Insertar(int insStart, int insMax, Semaphore semaforo){
+        this.semaforo = semaforo;
         this.insStart = insStart;
         this.insMax = insMax;
     }
@@ -12,18 +15,24 @@ public class Insertar extends Thread{
     public void run() {
         //super.run();
         for (int i = this.insStart;  i < this.insMax; i++){
-            ejecutar();
+            try {
+                semaforo.acquire();
+                ejecutar();
+                semaforo.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void ejecutar (){
-        try {
+       // try {
             Connectionbd conbd = new Connectionbd();
             conbd.insertarEmpleados(randomEmail(), randomIngreso());
-            TimeUnit.MILLISECONDS.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            //TimeUnit.MILLISECONDS.sleep(50);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private String randomEmail(){
@@ -70,22 +79,5 @@ public class Insertar extends Thread{
         int range = max - min + 1;
         int ingreso = (int) ((Math.random() * range) + min);
         return ingreso;
-    }
-
-
-    public int getInsStart() {
-        return insStart;
-    }
-
-    public void setInsStart(int insStart) {
-        this.insStart = insStart;
-    }
-
-    public int getInsMax() {
-        return insMax;
-    }
-
-    public void setInsMax(int insMax) {
-        this.insMax = insMax;
     }
 }

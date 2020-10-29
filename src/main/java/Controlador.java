@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.Semaphore;
 
 public class Controlador {
     public static void main(String[] args) {
@@ -31,7 +32,9 @@ public class Controlador {
     }
 
     public static void ejercicioInsertar(){
+        Semaphore semaforo =  new Semaphore(1,true);
         Scanner sc = new Scanner(System.in);
+
         System.out.println("Registros a insertar: ");
         int registros = sc.nextInt();
         System.out.println("Numero de hilos a utilizar: ");
@@ -49,7 +52,7 @@ public class Controlador {
                 insMax +=1;
                 diferencia--;
             }
-            arrayInsertar.add(new Insertar(insStart,insMax));
+            arrayInsertar.add(new Insertar(insStart,insMax, semaforo));
             insStart = insMax;
             insMax += inserts;
         }
@@ -59,35 +62,6 @@ public class Controlador {
             System.out.println("start " +arrayInsertar.get(i).getInsStart());
             System.out.println("max " + arrayInsertar.get(i).getInsMax());
         }*/
-    /*    int diferencia = 0;
-        //int addInsHilo = 0;
-        if(registros % hilos != 0) {
-            diferencia = registros - (inserts * hilos);
-            //addInsHilo = diferencia/hilos;
-            int count = 0;
-            while(diferencia != 0){
-
-                for (int i = 0; i < arrayInsertar.size() ; i++){
-                    arrayInsertar.get(count).setInsMax(arrayInsertar.get(count).getInsMax()+1);
-
-                    // System.out.println(count + "setInmax" + arrayInsertar.get(count).getInsMax());
-
-                    if(count != 0){
-                        arrayInsertar.get(count).setInsStart(arrayInsertar.get(count-1).getInsMax());
-                        // System.out.println(count + "setInStart" + arrayInsertar.get(count).getInsStart());
-                    }
-                }
-
-
-                //System.out.println("diferencia: " + diferencia );
-
-                diferencia--;
-                count++;
-                if(count > arrayInsertar.size()){
-                    count = 0;
-                }
-            }
-        }*/
 
 
         for (int i = 0; i < arrayInsertar.size() ; i++){
@@ -96,7 +70,7 @@ public class Controlador {
         }
         //arrayInsertar.forEach(Insertar::start);
     }
-            /*
+    /*
         Desarrollar dos aplicaciones en Java que cumplan los siguientes requisitos:
         1. Aplicación 1:
         1.1 A través de consola, solicita al usuario un número de registros a insertar.
