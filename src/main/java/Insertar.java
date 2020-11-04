@@ -1,38 +1,38 @@
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Insertar extends Thread{
-    private static Semaphore semaforo;
+    private static String DB_CONNECTION = "jdbc:mysql://localhost/BBDD_PSP_1";
+    private static String USER_NAME = "DAM2020_PSP";
+    private static String USER_PASSWORD= "DAM2020_PSP";
     private int insStart;
     private int insMax;
 
-    public Insertar(int insStart, int insMax, Semaphore semaforo){
-        this.semaforo = semaforo;
+    public Insertar(int insStart, int insMax){
         this.insStart = insStart;
         this.insMax = insMax;
     }
     @Override
     public void run() {
-        //super.run();
+        super.run();
         for (int i = this.insStart;  i < this.insMax; i++){
-            try {
-                semaforo.acquire();
-                ejecutar();
-                semaforo.release();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            insertarEmpleados(randomEmail(), randomIngreso());
         }
     }
 
-    private void ejecutar (){
-       // try {
-            Connectionbd conbd = new Connectionbd();
-            conbd.insertarEmpleados(randomEmail(), randomIngreso());
-            //TimeUnit.MILLISECONDS.sleep(50);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    private synchronized void insertarEmpleados(String email, int ingresos) {
+        try {
+            Connection connection = DriverManager.getConnection(DB_CONNECTION, USER_NAME, USER_PASSWORD);
+            //PreparedStatement
+            Statement consulta = connection.createStatement();
+            System.out.println(Thread.currentThread().getName() + " " + email + " " + ingresos);
+            consulta.executeUpdate("INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES ('" + email + "', " + ingresos + ");");
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     private String randomEmail(){
