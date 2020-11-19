@@ -25,16 +25,6 @@ public class Vista {
                 insStart = insMax;
                 insMax += inserts;
             }
-        /* for (int i = 0; i < arrayInsertar.size() ; i++){
-            System.out.println("start " +arrayInsertar.get(i).getInsStart());
-            System.out.println("max " + arrayInsertar.get(i).getInsMax());
-        }*/
-
-        /*for (int i = 0; i < arrayInsertar.size() ; i++){
-            arrayInsertar.get(i).start();
-           // arrayInsertar.get(i).join();
-        }*/
-
             arrayInsertar.forEach(Insertar::start);
         }else{
             System.out.println("Insercción no valida");

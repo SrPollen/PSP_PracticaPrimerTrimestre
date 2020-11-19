@@ -26,7 +26,6 @@ public class Insertar extends Thread{
         try {
             Connection connection = DriverManager.getConnection(DB_CONNECTION, USER_NAME, USER_PASSWORD);
             Statement consulta = connection.createStatement();
-            //System.out.println(Thread.currentThread().getName() + " " + email + " " + ingresos);
             consulta.executeUpdate("INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES ('" + email + "', " + ingresos + ");");
             connection.close();
         } catch (SQLException throwables) {
