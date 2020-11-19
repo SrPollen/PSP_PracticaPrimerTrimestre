@@ -1,3 +1,7 @@
+package vista;
+
+import hilos.Insertar;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,6 +21,7 @@ public class Vista {
 
             ArrayList<Insertar> arrayInsertar = new ArrayList<>();
             for (int i = 0; i < hilos ; i++){
+                //Para distribuir los registros sobrantes en cada hilo
                 if(diferencia > 0) {
                     insMax +=1;
                     diferencia--;

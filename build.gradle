@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -19,8 +19,8 @@ jar {
                 "Main-Class": "Controlador"
         )
     }
-    destinationDirectory = file("$rootDir/psp-1-jar")
-    archivesBaseName = 'insertar'
+    destinationDirectory = file("$rootDir")
+    archivesBaseName = 'PSP_App'
 }
 
 dependencies {
