@@ -25,9 +25,8 @@ public class Insertar extends Thread{
     private synchronized void insertarEmpleados(String email, int ingresos) {
         try {
             Connection connection = DriverManager.getConnection(DB_CONNECTION, USER_NAME, USER_PASSWORD);
-            //PreparedStatement
             Statement consulta = connection.createStatement();
-            System.out.println(Thread.currentThread().getName() + " " + email + " " + ingresos);
+            //System.out.println(Thread.currentThread().getName() + " " + email + " " + ingresos);
             consulta.executeUpdate("INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES ('" + email + "', " + ingresos + ");");
             connection.close();
         } catch (SQLException throwables) {
@@ -41,22 +40,23 @@ public class Insertar extends Thread{
     }
 
     private String randomWord() {
-        int min = 5;
-        int max = 12;
+        int min = 7;
+        int max = 14;
         int range = max - min + 1;
         int len = (int) ((Math.random() * range) + min);
 
-        String word = "";
+        String AlphaNumericString = "0123456789" + "abcdefghijklmnopqrstuvxyz";
+        StringBuilder sb = new StringBuilder(len);
+
         for (int i = 0; i < len; i++) {
-            int v = 1 + (int) (Math.random() * 26);
-            char c = (char) (v + (i == 0 ? 'A' : 'a') - 1);
-            word += c;
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
         }
-        return word;
+        return sb.toString();
     }
 
     private String randomOrgan() {
-        String organs[] = {"gmail","hotmail",".outlook","yahoo","google"};
+        String organs[] = {"gmail","hotmail","outlook","yahoo","google"};
         int min = 0;
         int max = organs.length;
         int range = max - min;
