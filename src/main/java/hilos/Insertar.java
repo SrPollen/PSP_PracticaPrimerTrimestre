@@ -19,20 +19,29 @@ public class Insertar extends Thread{
     @Override
     public void run() {
         super.run();
-        for (int i = this.insStart;  i < this.insMax; i++){
-            insertarEmpleados(randomEmail(), randomIngreso());
-        }
-    }
 
-    private synchronized void insertarEmpleados(String email, int ingresos) {
+
         try {
             Connection connection = DriverManager.getConnection(DB_CONNECTION, USER_NAME, USER_PASSWORD);
-            Statement consulta = connection.createStatement();
-            consulta.executeUpdate("INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES ('" + email + "', " + ingresos + ");");
+
+            for (int i = this.insStart;  i < this.insMax; i++){
+                insertarEmpleados(randomEmail(), randomIngreso(), connection);
+            }
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private synchronized void insertarEmpleados(String email, int ingresos, Connection connection) {
+
+        try {
+            Statement consulta = connection.createStatement();
+            consulta.executeUpdate("INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES ('" + email + "', " + ingresos + ");");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     private String randomEmail(){
